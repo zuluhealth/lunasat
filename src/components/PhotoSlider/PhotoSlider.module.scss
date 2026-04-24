@@ -1,0 +1,128 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.photoSlider {
+  background-color: $color-bg-secondary;
+  padding: $spacing-16 0;
+  overflow: hidden;
+
+  @include mobile {
+    padding: $spacing-10 0;
+  }
+}
+
+.container {
+  @include page-container;
+}
+
+.slides {
+  display: flex;
+  gap: $spacing-2;
+  margin-top: $spacing-10;
+  height: 400px;
+
+  @include tablet-down {
+    height: 320px;
+    gap: $spacing-1;
+  }
+}
+
+.slide {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: 4px;
+  opacity: 0.25;
+  transition: flex 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &.active {
+    flex: 3;
+    opacity: 1;
+  }
+
+  &:hover:not(.active) {
+    flex: 1.2;
+    opacity: 0.5;
+  }
+}
+
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.image {
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+
+  .slide:hover & {
+    transform: scale(1.05);
+  }
+}
+
+// Mobile styles
+.slidesMobile {
+  margin-top: $spacing-8;
+  position: relative;
+  height: 280px;
+}
+
+.slideMobile {
+  width: 100%;
+  height: 100%;
+  transition: opacity 0.3s ease;
+
+  &.fadeOut {
+    opacity: 0;
+  }
+
+  &.fadeIn {
+    opacity: 1;
+  }
+}
+
+.imageWrapperMobile {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.imageMobile {
+  object-fit: cover;
+  object-position: center;
+}
+
+// Indicators
+.indicators {
+  display: flex;
+  justify-content: center;
+  gap: $spacing-1;
+  margin-top: $spacing-6;
+}
+
+.indicator {
+  width: 32px;
+  height: 3px;
+  background-color: $color-border;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background-color 0.3s ease, width 0.3s ease;
+
+  &:hover {
+    background-color: $color-text-secondary;
+  }
+
+  &.indicatorActive {
+    background-color: $color-text-primary;
+    width: 48px;
+  }
+}

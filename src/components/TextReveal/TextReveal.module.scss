@@ -1,0 +1,14 @@
+@use '../../styles/variables' as *;
+
+.textReveal {
+  display: inline-block;
+  white-space: pre-wrap; // Preserve spaces
+  font-family: inherit; // Inherit font from parent
+  cursor: default;
+  
+  // Optional: Monospace look during animation could be cool but might cause layout shift
+  // &.animating {
+  //   font-family: $font-mono;
+  // }
+}
+

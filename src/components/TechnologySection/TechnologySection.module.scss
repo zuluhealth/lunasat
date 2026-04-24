@@ -1,0 +1,60 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.section {
+  padding: $spacing-20 0;
+  background-color: transparent;
+  border-bottom: 1px solid $color-border;
+
+  @include tablet-down {
+    padding: $spacing-12 0;
+  }
+
+  @include mobile {
+    padding: $spacing-10 0;
+  }
+}
+
+.container {
+  @include page-container;
+}
+
+.subtitle {
+  font-size: $font-size-lg;
+  line-height: 1.6;
+  color: $color-text-primary;
+  margin-top: $spacing-4;
+  max-width: 800px;
+  font-weight: 300;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+
+  @include tablet-down {
+    font-size: $font-size-base;
+  }
+
+  @include mobile {
+    font-size: $font-size-sm;
+    margin-top: $spacing-2;
+  }
+}
+
+.header {
+  margin-bottom: $spacing-12;
+
+  @include mobile {
+    margin-bottom: $spacing-8;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-5;
+
+  @include tablet-down {
+    grid-template-columns: 1fr;
+    gap: $spacing-4;
+  }
+}

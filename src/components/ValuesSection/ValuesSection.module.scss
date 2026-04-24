@@ -1,0 +1,39 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.section {
+  padding: $spacing-20 0;
+  background-color: $color-bg-tertiary;
+  border-bottom: 1px solid $color-border;
+
+  @include tablet-down {
+    padding: $spacing-12 0;
+  }
+
+  @include mobile {
+    padding: $spacing-10 0;
+  }
+}
+
+.container {
+  @include page-container;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $spacing-4;
+  margin-top: $spacing-12;
+
+  @include tablet-down {
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-4;
+    margin-top: $spacing-8;
+  }
+
+  @include mobile {
+    grid-template-columns: 1fr;
+    gap: $spacing-4;
+    margin-top: $spacing-6;
+  }
+}

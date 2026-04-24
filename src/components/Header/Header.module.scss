@@ -1,0 +1,141 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background: rgba($color-bg-primary, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid $color-border;
+  height: $spacing-10; // 80px
+  display: flex;
+  align-items: center;
+}
+
+.container {
+  width: 100%;
+  @include page-container;
+  @include flex-between;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+
+  .logoImage {
+    opacity: 0;
+    display: block;
+    max-height: 14px;
+    max-width: 118px;
+    transform: translateX(-100px);
+
+    &.logoAnimated {
+      animation: logoSlideIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+  }
+
+  @include mobile {
+    .logoImage {
+      max-height: 18px;
+      max-width: 152px;
+      transform: translateX(-80px);
+    }
+  }
+}
+
+@keyframes logoSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+  100% {
+    opacity: 0.9;
+    transform: translateX(0);
+  }
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: $spacing-6;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+
+  @include tablet-down {
+    gap: $spacing-4;
+    position: static;
+    transform: none;
+    margin-left: auto;
+    margin-right: $spacing-4;
+  }
+
+  @include mobile {
+    display: none;
+  }
+}
+
+.navLink {
+  font-family: $font-title;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: $color-text-primary;
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  flex-shrink: 0;
+}
+
+.button {
+  display: inline-block;
+  padding: $spacing-1 $spacing-2;
+  background-color: transparent;
+  color: $color-text-primary;
+  font-family: $font-title;
+  font-size: $font-size-xs;
+  font-weight: 500;
+  border: 1px solid $color-border-light;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  white-space: nowrap;
+
+  &:hover {
+    background-color: $color-white;
+    color: $color-black;
+    border-color: $color-white;
+  }
+
+  @include mobile {
+    font-size: $font-size-xs;
+    padding: $spacing-1 $spacing-2;
+  }
+}
+
+.buttonOutlined {
+  color: $color-text-secondary;
+  border-color: $color-border;
+  background-color: transparent;
+
+  &:hover {
+    background-color: transparent;
+    color: $color-text-primary;
+    border-color: $color-text-primary;
+  }
+
+  @include mobile {
+    display: none;
+  }
+}

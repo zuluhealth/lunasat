@@ -1,0 +1,82 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.section {
+  padding: $spacing-12 0;
+  background-color: transparent;
+  border-bottom: 1px solid $color-border;
+
+  @include tablet-down {
+    padding: $spacing-10 0;
+  }
+
+  @include mobile {
+    padding: $spacing-8 0;
+  }
+}
+
+.container {
+  @include page-container;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1px; // Gap creates the border lines if we use a background color for the grid container
+  background-color: $color-border; // Lines color
+  border: 1px solid $color-border;
+
+  @include tablet-down {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @include mobile {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: rgba($color-bg-primary, 0.92);
+  padding: $spacing-8 $spacing-3;
+  min-height: 180px;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: rgba($color-bg-primary, 1);
+  }
+}
+
+.value {
+  font-family: $font-title;
+  font-size: clamp(#{$font-size-3xl}, 3.5vw, #{$font-size-5xl});
+  font-weight: 500;
+  line-height: 1;
+  margin-bottom: $spacing-2;
+  color: $color-white;
+
+  @include tablet-down {
+    font-size: $font-size-4xl;
+  }
+
+  @include mobile {
+    font-size: $font-size-3xl;
+  }
+}
+
+.label {
+  font-family: $font-title;
+  font-size: $font-size-xs;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: $color-text-secondary;
+  line-height: 1.4;
+
+  @include mobile {
+    font-size: 11px;
+  }
+}

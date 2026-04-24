@@ -1,0 +1,131 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.section {
+  padding: $spacing-20 0;
+  background-color: $color-bg-tertiary;
+  border-bottom: 1px solid $color-border;
+
+  @include tablet-down {
+    padding: $spacing-12 0;
+  }
+
+  @include mobile {
+    padding: $spacing-10 0;
+  }
+}
+
+.container {
+  @include page-container;
+}
+
+.header {
+  margin-bottom: $spacing-12;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+
+  @include mobile {
+    margin-bottom: $spacing-8;
+  }
+}
+
+.form {
+  max-width: 100%;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-8;
+  margin-bottom: $spacing-8;
+
+  @include tablet-down {
+    gap: $spacing-6;
+    margin-bottom: $spacing-6;
+  }
+
+  @include mobile {
+    grid-template-columns: 1fr;
+    gap: $spacing-6;
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-family: $font-title;
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-2;
+  text-transform: uppercase;
+  
+  @include mobile {
+    font-size: $font-size-xs;
+  }
+}
+
+.input,
+.textarea {
+  padding: $spacing-2 0;
+  font-family: $font-title;
+  font-size: $font-size-base;
+  color: $color-text-primary;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid $color-border;
+  border-radius: 0;
+  transition: all 0.2s ease;
+  width: 100%;
+
+  &:focus {
+    outline: none;
+    border-color: $color-white;
+    padding-left: $spacing-2;
+    background-color: rgba($color-white, 0.05);
+  }
+
+  &::placeholder {
+    color: $color-text-tertiary;
+    font-family: $font-title;
+    font-size: $font-size-sm;
+  }
+
+  @include mobile {
+    font-size: $font-size-sm;
+  }
+}
+
+.textarea {
+  resize: none;
+  min-height: 120px;
+}
+
+.button {
+  width: 100%;
+  padding: $spacing-4;
+  background-color: transparent;
+  color: $color-text-primary;
+  font-family: $font-title;
+  font-size: $font-size-sm;
+  font-weight: 500;
+  border: 1px solid $color-border;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: $spacing-8;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+
+  &:hover {
+    background-color: $color-white;
+    color: $color-black;
+    border-color: $color-white;
+  }
+
+  @include mobile {
+    padding: $spacing-3;
+  }
+}

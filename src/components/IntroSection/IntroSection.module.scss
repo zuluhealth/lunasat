@@ -1,0 +1,114 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.section {
+  padding: $spacing-20 0;
+  background-color: transparent;
+  position: relative;
+  border-bottom: 1px solid $color-border;
+  overflow: hidden;
+
+  @include tablet-down {
+    padding: $spacing-12 0;
+  }
+
+  @include mobile {
+    padding: $spacing-10 0;
+  }
+}
+
+.container {
+  @include page-container;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.header {
+  max-width: 800px;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.title {
+  font-size: $font-size-4xl;
+  font-weight: 500;
+  margin-bottom: $spacing-4;
+  color: $color-text-primary;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+
+  @include tablet-down {
+    font-size: $font-size-3xl;
+  }
+
+  @include mobile {
+    font-size: $font-size-2xl;
+  }
+}
+
+.descriptions {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+}
+
+.description {
+  font-size: $font-size-lg;
+  line-height: 1.6;
+  color: $color-text-secondary;
+  font-weight: 300;
+
+  @include tablet-down {
+    font-size: $font-size-base;
+  }
+
+  @include mobile {
+    font-size: $font-size-sm;
+  }
+}
+
+.line {
+  width: 100px;
+  height: 1px;
+  background-color: $color-text-tertiary;
+  margin-top: $spacing-8;
+  margin-left: auto;
+  margin-right: auto;
+
+  @include mobile {
+    margin-top: $spacing-6;
+  }
+}
+
+.gridOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background-image: 
+    linear-gradient(to right, $color-border 1px, transparent 1px);
+  background-size: calc(100% / 4) 100%;
+  opacity: 0.1;
+  z-index: 0;
+}
+
+.decorative {
+  font-family: $font-title;
+  color: $color-text-tertiary;
+  
+  @include tablet-down {
+    display: none;
+  }
+}
+
+.marker {
+  font-size: $font-size-xs;
+  border: 1px solid $color-border;
+  padding: $spacing-1;
+}

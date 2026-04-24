@@ -1,0 +1,174 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.card {
+  background-color: rgba($color-bg-primary, 0.92);
+  border: 1px solid $color-border;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+
+  &:hover,
+  &.cardOpen {
+    border-color: $color-white;
+    background-color: rgba($color-bg-primary, 1);
+
+    .icon {
+      background-color: $color-white;
+      color: $color-black;
+    }
+  }
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: $spacing-6;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  color: inherit;
+
+  @include tablet-down {
+    padding: $spacing-5;
+  }
+
+  @include mobile {
+    padding: $spacing-4;
+  }
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: $spacing-3;
+}
+
+.icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid $color-white;
+  color: $color-white;
+  transition: all 0.3s ease;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.title {
+  font-size: $font-size-xl;
+  font-weight: 500;
+  color: $color-white;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+
+  @include mobile {
+    font-size: $font-size-lg;
+  }
+}
+
+.chevron {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  color: $color-text-secondary;
+  transition: transform 0.3s ease;
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  &.chevronOpen {
+    transform: rotate(180deg);
+  }
+}
+
+// Dropdown styles
+.dropdown {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+
+.dropdownContent {
+  padding: 0 $spacing-6 $spacing-6;
+
+  @include tablet-down {
+    padding: 0 $spacing-5 $spacing-5;
+  }
+
+  @include mobile {
+    padding: 0 $spacing-4 $spacing-4;
+  }
+}
+
+.description {
+  font-family: $font-title;
+  font-size: $font-size-base;
+  line-height: 1.6;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-4;
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background-color: $color-border;
+  margin-bottom: $spacing-6;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.listItem {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-3;
+  font-family: $font-title;
+  font-size: $font-size-sm;
+  line-height: 1.5;
+  color: $color-text-secondary;
+}
+
+.arrow {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  margin-top: 3px;
+  color: $color-text-tertiary;
+}
+
+.footer {
+  font-family: $font-title;
+  font-size: $font-size-sm;
+  line-height: 1.6;
+  color: $color-text-secondary;
+  margin-top: $spacing-6;
+  padding-top: $spacing-4;
+  border-top: 1px solid $color-border;
+  font-style: italic;
+}

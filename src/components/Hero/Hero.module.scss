@@ -1,0 +1,149 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-bottom: 1px solid $color-border;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  @include page-container;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.titleWrapper {
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  font-size: clamp(#{$font-size-3xl}, 6vw, #{$font-size-6xl});
+  color: $color-white;
+  font-weight: 500;
+  margin-bottom: $spacing-4;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+
+  @include mobile {
+    font-size: $font-size-2xl;
+    line-height: 1.1;
+  }
+}
+
+.titleText {
+  display: inline;
+}
+
+.subtitle {
+  font-family: $font-title;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: 1.7;
+  max-width: 700px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-top: $spacing-3;
+
+  @include mobile {
+    font-size: $font-size-xs;
+    max-width: 100%;
+  }
+}
+
+.cta {
+  display: inline-block;
+  margin-top: $spacing-4;
+  padding: $spacing-2 $spacing-4;
+  background-color: transparent;
+  color: $color-text-primary;
+  font-family: $font-title;
+  font-size: $font-size-sm;
+  font-weight: 500;
+  border: 1px solid $color-border-light;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: $color-white;
+    color: $color-black;
+    border-color: $color-white;
+  }
+
+  @include mobile {
+    padding: $spacing-1 $spacing-3;
+    font-size: $font-size-xs;
+  }
+}
+
+// Tech Overlay Elements
+.techOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.crosshair {
+  position: absolute;
+  color: $color-text-tertiary;
+  font-family: $font-title;
+  font-size: 24px;
+  font-weight: 300;
+}
+
+.coordinates {
+  position: absolute;
+  bottom: $spacing-12;
+  right: $page-margin;
+  font-family: $font-title;
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  text-align: right;
+  line-height: 1.5;
+
+  @include mobile {
+    display: none;
+  }
+}
+
+.scrollIndicator {
+  position: absolute;
+  bottom: $spacing-12;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-2;
+
+  font-family: $font-title;
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+
+  .line {
+    width: 1px;
+    height: 40px;
+    background-color: $color-text-tertiary;
+  }
+}

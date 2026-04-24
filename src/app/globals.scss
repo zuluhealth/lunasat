@@ -1,0 +1,78 @@
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: $color-bg-primary;
+}
+
+body {
+  font-family: $font-body;
+  color: $color-text-primary;
+  background-color: transparent;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-title;
+  line-height: 1.1;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  text-transform: uppercase; // Defense tech often uses uppercase headers
+}
+
+button {
+  font-family: $font-title;
+  cursor: pointer;
+  border: none;
+  background: none;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: opacity $transition-fast;
+  
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+ul, ol {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+// Utility classes for grid lines/overlays could go here
+.grid-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1000;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 100px 100px;
+  mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+}
+
+// .mono utility class removed - using single font throughout

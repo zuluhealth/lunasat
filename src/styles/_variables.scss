@@ -1,0 +1,64 @@
+// Colors - Defense Tech Palette
+$color-bg-primary: #0a0a0a;
+$color-bg-secondary: #141414;
+$color-bg-tertiary: #1a1a1a;
+
+$color-white: #FFFFFF;
+$color-black: #000000;
+$color-accent: #FFFFFF; // Stark white as accent, or maybe a very subtle electric blue if needed
+$color-accent-dim: rgba(255, 255, 255, 0.6);
+
+$color-text-primary: #F2F2F2;
+$color-text-secondary: #888888;
+$color-text-tertiary: #444444;
+
+$color-border: #333333;
+$color-border-light: #444444;
+
+// Spacing - 8px system (Unchanged)
+$spacing-unit: 8px;
+$spacing-1: $spacing-unit; // 8px
+$spacing-2: $spacing-unit * 2; // 16px
+$spacing-3: $spacing-unit * 3; // 24px
+$spacing-4: $spacing-unit * 4; // 32px
+$spacing-5: $spacing-unit * 5; // 40px
+$spacing-6: $spacing-unit * 6; // 48px
+$spacing-8: $spacing-unit * 8; // 64px
+$spacing-10: $spacing-unit * 10; // 80px
+$spacing-12: $spacing-unit * 12; // 96px
+$spacing-16: $spacing-unit * 16; // 128px
+$spacing-20: $spacing-unit * 20; // 160px
+
+// Layout (Unchanged)
+$page-margin: $spacing-12; // 96px
+$page-margin-tablet: $spacing-6; // 48px
+$page-margin-mobile: $spacing-3; // 24px
+
+// Typography
+$font-title: 'Funnel Display', sans-serif;
+$font-body: 'Noto Sans', sans-serif;
+// $font-mono removed - using single font throughout
+
+// Font sizes - 8px system
+$font-size-xs: 12px;
+$font-size-sm: 14px;
+$font-size-base: 16px;
+$font-size-lg: 20px;
+$font-size-xl: 24px;
+$font-size-2xl: 32px;
+$font-size-3xl: 40px;
+$font-size-4xl: 48px;
+$font-size-5xl: 56px;
+$font-size-6xl: 64px;
+$font-size-7xl: 80px; // Added larger size for hero
+
+// Breakpoints (Unchanged)
+$breakpoint-mobile: 480px;
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 1024px;
+$breakpoint-wide: 1440px;
+
+// Animation
+$transition-fast: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+$transition-normal: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+$transition-slow: 0.8s cubic-bezier(0.16, 1, 0.3, 1);

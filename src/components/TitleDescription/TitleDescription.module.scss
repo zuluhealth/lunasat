@@ -1,0 +1,54 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.container {
+  max-width: 800px;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.title {
+  font-size: $font-size-4xl;
+  font-weight: 500;
+  margin-bottom: $spacing-4;
+  color: $color-text-primary;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+
+  @include tablet-down {
+    font-size: $font-size-3xl;
+  }
+
+  @include mobile {
+    font-size: $font-size-2xl;
+  }
+}
+
+.description {
+  font-size: $font-size-lg;
+  line-height: 1.6;
+  color: $color-text-secondary;
+  font-weight: 300;
+
+  @include tablet-down {
+    font-size: $font-size-base;
+  }
+
+  @include mobile {
+    font-size: $font-size-sm;
+  }
+}
+
+.line {
+  width: 100px;
+  height: 1px;
+  background-color: $color-text-tertiary;
+  margin-top: $spacing-8;
+  margin-left: auto;
+  margin-right: auto;
+
+  @include mobile {
+    margin-top: $spacing-6;
+  }
+}
