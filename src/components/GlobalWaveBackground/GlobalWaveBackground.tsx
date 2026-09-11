@@ -42,6 +42,8 @@ const GlobalWaveBackground: React.FC<GlobalWaveBackgroundProps> = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: -1000, y: -1000 });
   const animationRef = useRef<number>(0);
+  const drawRef = useRef<() => void>(() => undefined);
+  const shouldAnimateRef = useRef(true);
   const timeRef = useRef(0);
 
   // Generate unique random parameters for each line
@@ -74,16 +76,18 @@ const GlobalWaveBackground: React.FC<GlobalWaveBackgroundProps> = ({
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const width = canvas.width;
-    const height = canvas.height;
-    const dpr = window.devicePixelRatio || 1;
+    // Draw in CSS pixels. The backing store may use a capped DPR, but mixing
+    // that capped value with the device's full DPR compresses the artwork into
+    // the upper-left portion of high-density displays.
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
     const mouse = mouseRef.current;
 
     // Clear canvas
     ctx.clearRect(0, 0, width, height);
 
     // Calculate line spacing based on viewport height
-    const lineSpacing = height / dpr / (lineCount + 1);
+    const lineSpacing = height / (lineCount + 1);
 
     // Draw wave lines
     for (let i = 1; i <= lineCount; i++) {
@@ -101,7 +105,7 @@ const GlobalWaveBackground: React.FC<GlobalWaveBackgroundProps> = ({
 
       // Calculate points along the curve
       for (let j = 0; j <= controlPoints; j++) {
-        const x = (j / controlPoints) * (width / dpr);
+        const x = (j / controlPoints) * width;
         const time = timeRef.current;
 
         // Multiple wave harmonics with unique parameters per line
@@ -156,22 +160,35 @@ const GlobalWaveBackground: React.FC<GlobalWaveBackgroundProps> = ({
     // Update time
     timeRef.current += 0.016;
 
-    // Continue animation
-    animationRef.current = requestAnimationFrame(draw);
+    // Continue only on capable, visible devices. The ref avoids a recursive
+    // callback dependency and lets the visibility handler stop the loop.
+    if (shouldAnimateRef.current) {
+      animationRef.current = requestAnimationFrame(() => drawRef.current());
+    }
   }, [lineCount, lineColor, lineOpacity, mouseInfluenceRadius, mouseInfluenceStrength, lineParams]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    // Set canvas size to viewport
+    drawRef.current = draw;
+
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+    const isSmallScreen = window.matchMedia('(max-width: 767px)').matches;
+    const canAnimate = !prefersReducedMotion && !isSmallScreen;
+    shouldAnimateRef.current = canAnimate && !document.hidden;
+
+    // Set canvas size to viewport while limiting the number of physical pixels
+    // redrawn each frame on high-density displays.
     const resizeCanvas = () => {
-      const dpr = window.devicePixelRatio || 1;
-      canvas.width = window.innerWidth * dpr;
-      canvas.height = window.innerHeight * dpr;
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      canvas.width = Math.round(window.innerWidth * dpr);
+      canvas.height = Math.round(window.innerHeight * dpr);
       const ctx = canvas.getContext('2d');
       if (ctx) {
-        ctx.scale(dpr, dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       }
     };
 
@@ -188,19 +205,34 @@ const GlobalWaveBackground: React.FC<GlobalWaveBackgroundProps> = ({
       mouseRef.current = { x: -1000, y: -1000 };
     };
 
+    const handleVisibilityChange = () => {
+      shouldAnimateRef.current = canAnimate && !document.hidden;
+
+      if (shouldAnimateRef.current) {
+        cancelAnimationFrame(animationRef.current);
+        animationRef.current = requestAnimationFrame(() => drawRef.current());
+      }
+    };
+
     // Initialize
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
-    window.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseleave', handleMouseLeave);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
-    // Start animation
-    animationRef.current = requestAnimationFrame(draw);
+    if (canAnimate) {
+      window.addEventListener('mousemove', handleMouseMove, { passive: true });
+      document.addEventListener('mouseleave', handleMouseLeave);
+    }
+
+    // Draw once on small/reduced-motion screens; otherwise start the loop.
+    animationRef.current = requestAnimationFrame(() => drawRef.current());
 
     return () => {
       window.removeEventListener('resize', resizeCanvas);
       window.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseleave', handleMouseLeave);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      shouldAnimateRef.current = false;
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }

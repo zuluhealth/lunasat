@@ -131,24 +131,21 @@ export default function Home() {
   ];
 
   const stats = [
-    { value: '30', label: 'YEARS OF EXCELLENCE' },
-    { value: '200+', label: 'TEAM MEMBERS' },
+    { value: '23', label: 'YEARS OF EXCELLENCE' },
     { value: '2,000+', label: 'MICROWAVE LINKS INSTALLED' },
     { value: '6,000+', label: 'V-SAT INSTALLED & MANAGED' },
     { value: '57,000+', label: 'RF RADIOS INSTALLED' },
   ];
 
   const partners = [
-    { name: 'L3Harris' },
-    { name: 'Leidos' },
-    { name: 'FLIR' },
-    { name: 'Frequentis' },
-    { name: 'Genasys' },
-    { name: 'Rohde & Schwarz' },
-    { name: 'Cisco' },
-    { name: 'Nokia' },
-    { name: 'Microchip' },
-    { name: 'And More' },
+    { name: 'L3Harris', logo: '/images/partners/l3harris.svg' },
+    { name: 'Leidos', logo: '/images/partners/leidos.png' },
+    { name: 'Microchip', logo: '/images/partners/microchip.png' },
+    { name: 'Teledyne', logo: '/images/partners/teledyne.png' },
+    { name: 'Rohde & Schwarz — Authorized Distributor', logo: '/images/partners/rs-authorized-distributor.png' },
+    { name: 'Genasys', logo: '/images/partners/genasys.png' },
+    { name: 'LRAD by Genasys', logo: '/images/partners/lrad.png' },
+    { name: 'AADS', logo: '/images/partners/aads.svg' },
   ];
 
   return (
@@ -159,7 +156,6 @@ export default function Home() {
       <Hero
         title="Innovative Solutions for a More Secure Society"
         subtitle="Lunasat is a systems integrator specializing in secured communications, security infrastructure, and telecommunications. We don't just install technology—we engineer, maintain, and support it for the long term."
-        backgroundImage="/lunasat-background.webp"
         ctaText="Contact us"
         ctaHref="#contact"
       />
@@ -167,7 +163,7 @@ export default function Home() {
       <IntroSection
         title="Engineering at Our Core"
         description={[
-          "With over 90% of our team comprised of engineers, every project is tackled with technical depth, a long-term vision and 25+ years of knowledge and experience in delivering mission critical solutions in harsh environments.",
+          "With over 90% of our team comprised of engineers, every project is tackled with technical depth, a long-term vision and 23 years of knowledge and experience in delivering mission critical solutions in harsh environments.",
           "We partner with world-class technology manufacturers to deliver the best technologies across domains. But that is not where our real value is — we leverage our highly skilled team of Field Service Representatives to provide the best support services to ensure our clients' success.",
           "From design through procurement, commissioning & support, our engineers remain on the ground with our clients. We believe in routine preventive maintenance before problems arise and when something does go wrong, we're already there."
         ]}
@@ -188,7 +184,7 @@ export default function Home() {
 
       <SolutionsSection
         title="Our Capabilities"
-        description="We integrate, install, maintain, and train users on mission-critical technology systems. Our work spans three core areas:"
+        description="We integrate, install, maintain, and train users on mission-critical technology systems. Our work spans four core areas:"
         solutions={solutions}
       />
       
@@ -211,8 +207,6 @@ export default function Home() {
           { label: 'Contact', href: '#contact' },
         ]}
         legalLinks={[
-          { label: 'Privacy Policy', href: '#privacy' },
-          { label: 'Terms & Conditions', href: '#terms' },
           { label: 'Contact us', href: '#contact' },
         ]}
       />

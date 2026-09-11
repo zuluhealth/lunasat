@@ -12,7 +12,17 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Design-source JSX files are published as downloadable artifacts, not app code.
+    "public/**/*.jsx",
   ]),
+  {
+    rules: {
+      // The portal intentionally renders technical labels prefixed with `//`.
+      "react/jsx-no-comment-textnodes": "off",
+      // The stylesheet is declared once in the App Router root layout.
+      "@next/next/no-page-custom-font": "off",
+    },
+  },
 ]);
 
 export default eslintConfig;

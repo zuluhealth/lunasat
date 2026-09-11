@@ -1,0 +1,44 @@
+name: CI
+
+# Garde-fou minimal : est-ce que le projet installe et compile encore ?
+# C'est ce qui permet de merger un bump de dependance sans le verifier a la main.
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  packages: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: install + build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: install
+        run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: security regression tests
+        run: npm run test:security
+
+      - name: dependency security audit
+        run: npm audit --audit-level=high
+
+      - name: build
+        run: npm run build

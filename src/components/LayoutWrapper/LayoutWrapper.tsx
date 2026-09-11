@@ -11,7 +11,7 @@ const LayoutWrapper: React.FC<LayoutWrapperProps> = ({ children }) => {
   return (
     <>
       <GlobalWaveBackground
-        lineCount={40}
+        lineCount={28}
         lineColor="rgba(255, 255, 255, 0.35)"
         mouseInfluenceRadius={300}
         mouseInfluenceStrength={80}

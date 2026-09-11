@@ -2,89 +2,74 @@ import type { Metadata } from "next";
 import "./globals.scss";
 import LayoutWrapper from "@/components/LayoutWrapper";
 
-const menaCountries = [
-  "UAE", "United Arab Emirates", "Saudi Arabia", "KSA", "Qatar", "Kuwait",
-  "Bahrain", "Oman", "Jordan", "Lebanon", "Egypt", "Iraq", "Morocco",
-  "Algeria", "Tunisia", "Libya", "Yemen", "Palestine", "Middle East",
-  "North Africa", "MENA", "Gulf", "GCC",
-];
-
-const partnerBrands = [
-  "Genasys", "Genasys MENA", "Genasys Middle East",
-  "Rohde & Schwarz", "Rohde Schwarz", "R&S", "Rohde & Schwarz Middle East", "Rohde & Schwarz MENA",
-  "Cisco", "Cisco Systems", "Cisco Middle East", "Cisco MENA", "Cisco partner MENA",
-  "Nokia", "Nokia Networks", "Nokia Middle East", "Nokia MENA",
-  "Microchip", "Microchip Technology", "Microchip Middle East", "Microchip MENA",
-];
-
-const partnerKeywords = [
-  ...partnerBrands,
-  ...menaCountries.flatMap((c) =>
-    ["Genasys", "Rohde & Schwarz", "Cisco", "Nokia", "Microchip"].map(
-      (b) => `${b} ${c}`
-    )
-  ),
-  "Genasys distributor MENA",
-  "Rohde & Schwarz distributor Middle East",
-  "Cisco systems integrator MENA",
-  "Nokia telecom partner Middle East",
-  "Microchip authorized partner MENA",
-  "secured communications MENA",
-  "tactical radios Middle East",
-  "VSAT Middle East",
-  "microwave links MENA",
-  "RF systems Gulf",
-  "air traffic control Middle East",
-];
+const siteUrl = "https://lunasat.com";
+const siteTitle = "Lunasat | Mission-Critical Systems Integrator";
+const siteDescription =
+  "Lunasat engineers, integrates, and supports secure communications, telecom, security, and airspace systems across the Middle East and North Africa.";
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://lunasat.com'),
-  title: "Lunasat | Genasys, Rohde & Schwarz, Cisco, Nokia & Microchip Partner in MENA",
-  description: "Lunasat is a trusted systems integrator and authorized partner for Genasys, Rohde & Schwarz, Cisco, Nokia and Microchip across the MENA region — delivering secured communications, telecommunications, security infrastructure and airspace & control solutions.",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: siteTitle,
+    template: "%s | Lunasat",
+  },
+  description: siteDescription,
+  applicationName: "Lunasat",
+  authors: [{ name: "Lunasat", url: siteUrl }],
+  creator: "Lunasat",
+  publisher: "Lunasat",
   keywords: [
-    "satellite communications",
-    "secure networks",
-    "telecommunications",
-    "tactical systems",
-    "security infrastructure",
     "Lunasat",
-    "Lunasat MENA",
-    "Lunasat Middle East",
     "systems integrator MENA",
-    ...partnerKeywords,
+    "secured communications",
+    "telecommunications infrastructure",
+    "security and surveillance",
+    "air traffic control",
+    "mission-critical systems",
+    "Middle East",
+    "North Africa",
   ],
-  authors: [{ name: "Lunasat" }],
+  alternates: { canonical: "/" },
+  category: "technology",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   openGraph: {
-    title: "Lunasat | Genasys, Rohde & Schwarz, Cisco, Nokia & Microchip Partner in MENA",
-    description: "Authorized partner and systems integrator for Genasys, Rohde & Schwarz, Cisco, Nokia and Microchip in the Middle East and North Africa. Secured communications, telecommunications and mission-critical infrastructure.",
-    url: "https://lunasat.com",
+    type: "website",
+    url: "/",
     siteName: "Lunasat",
+    title: siteTitle,
+    description: siteDescription,
     images: [
       {
         url: "/lunasat-icon.svg",
         width: 512,
         height: 512,
-        alt: "Lunasat Logo",
+        alt: "Lunasat",
       },
     ],
     locale: "en_US",
-    alternateLocale: ["ar_AE", "ar_SA", "ar_EG", "fr_MA"],
-    type: "website",
   },
   twitter: {
-    card: "summary_large_image",
-    title: "Lunasat | Genasys, Rohde & Schwarz, Cisco, Nokia & Microchip Partner in MENA",
-    description: "Authorized partner and systems integrator for Genasys, Rohde & Schwarz, Cisco, Nokia and Microchip across the MENA region.",
+    card: "summary",
+    title: siteTitle,
+    description: siteDescription,
     images: ["/lunasat-icon.svg"],
   },
   icons: {
     icon: [
-      { url: "/lunasat-icon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "32x32", type: "image/x-icon" },
+      { url: "/icon.svg", sizes: "any", type: "image/svg+xml" },
+      { url: "/icons/lunasat-192.png", sizes: "192x192", type: "image/png" },
     ],
+    shortcut: "/favicon.ico",
     apple: [
-      { url: "/lunasat-icon.svg", type: "image/svg+xml" },
+      { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
     ],
   },
+  manifest: "/manifest.webmanifest",
   robots: {
     index: true,
     follow: true,
@@ -96,58 +81,24 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  verification: {
-    // Add your verification codes when ready
-    // google: 'your-google-verification-code',
-    // yandex: 'your-yandex-verification-code',
-  },
 };
 
 const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: "Lunasat",
-  url: "https://lunasat.com",
-  logo: "https://lunasat.com/lunasat-icon.svg",
-  description:
-    "Lunasat is a systems integrator and authorized partner for Genasys, Rohde & Schwarz, Cisco, Nokia and Microchip across the MENA region, delivering secured communications, telecommunications, security infrastructure and airspace & control solutions.",
+  url: siteUrl,
+  logo: `${siteUrl}/lunasat-icon.svg`,
+  description: siteDescription,
   areaServed: [
     { "@type": "Place", name: "Middle East" },
     { "@type": "Place", name: "North Africa" },
-    { "@type": "Place", name: "MENA" },
-    { "@type": "Country", name: "United Arab Emirates" },
-    { "@type": "Country", name: "Saudi Arabia" },
-    { "@type": "Country", name: "Qatar" },
-    { "@type": "Country", name: "Kuwait" },
-    { "@type": "Country", name: "Bahrain" },
-    { "@type": "Country", name: "Oman" },
-    { "@type": "Country", name: "Jordan" },
-    { "@type": "Country", name: "Lebanon" },
-    { "@type": "Country", name: "Egypt" },
-    { "@type": "Country", name: "Iraq" },
-    { "@type": "Country", name: "Morocco" },
-    { "@type": "Country", name: "Algeria" },
-    { "@type": "Country", name: "Tunisia" },
-  ],
-  brand: [
-    { "@type": "Brand", name: "Genasys" },
-    { "@type": "Brand", name: "Rohde & Schwarz" },
-    { "@type": "Brand", name: "Cisco" },
-    { "@type": "Brand", name: "Nokia" },
-    { "@type": "Brand", name: "Microchip" },
   ],
   knowsAbout: [
-    "Genasys",
-    "Rohde & Schwarz",
-    "Cisco",
-    "Nokia",
-    "Microchip",
-    "Secured Communications",
-    "Tactical Radios",
-    "VSAT",
-    "Microwave Links",
-    "Air Traffic Control",
-    "RF Monitoring",
+    "Secured communications",
+    "Telecommunications infrastructure",
+    "Security and surveillance",
+    "Airspace and control systems",
   ],
 };
 
@@ -161,18 +112,21 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
-        <meta name="geo.region" content="AE;SA;QA;KW;BH;OM;JO;LB;EG;IQ;MA;DZ;TN;LY;YE" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Noto+Sans:wght@300..700&display=swap"
+          rel="stylesheet"
+        />
+        <meta name="geo.region" content="ME" />
         <meta name="geo.placename" content="Middle East and North Africa" />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationJsonLd).replace(/</g, "\\u003c"),
+          }}
         />
       </head>
       <body>
-        <LayoutWrapper>
-          {children}
-        </LayoutWrapper>
+        <LayoutWrapper>{children}</LayoutWrapper>
       </body>
     </html>
   );

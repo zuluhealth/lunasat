@@ -95,7 +95,8 @@
   }
 
   @include mobile {
-    font-size: $font-size-sm;
+    // Prevent iOS Safari from zooming the viewport when a field receives focus.
+    font-size: $font-size-base;
   }
 }
 

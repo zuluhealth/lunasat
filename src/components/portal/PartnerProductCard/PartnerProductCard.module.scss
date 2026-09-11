@@ -1,0 +1,149 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+  padding: $spacing-3;
+  background-color: $color-bg-secondary;
+  border: 1px solid $color-border;
+  transition: border-color $transition-fast, background-color $transition-fast;
+
+  &:hover {
+    border-color: $color-border-light;
+    background-color: $color-bg-tertiary;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-2;
+}
+
+.vendor {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-1;
+}
+
+.vendorLogo {
+  width: 28px;
+  height: 28px;
+  border: 1px solid $color-border-light;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $color-bg-primary;
+}
+
+.vendorLogoGlyph {
+  font-family: $font-title;
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  letter-spacing: 0;
+}
+
+.vendorName {
+  font-family: $font-title;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: $color-text-secondary;
+}
+
+.idTag {
+  font-family: $font-title;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: $color-text-tertiary;
+  text-transform: uppercase;
+}
+
+.title {
+  font-family: $font-title;
+  font-size: $font-size-lg;
+  color: $color-text-primary;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  line-height: 1.15;
+}
+
+.description {
+  font-family: $font-body;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: 1.55;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-1;
+  margin-top: $spacing-1;
+}
+
+.tag {
+  font-family: $font-title;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border: 1px solid $color-border;
+  color: $color-text-secondary;
+}
+
+.authorization {
+  margin-top: $spacing-1;
+  padding: $spacing-1 $spacing-2;
+  border: 1.5px solid $color-text-primary;
+  background-color: rgba(255, 255, 255, 0.03);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: $spacing-1;
+}
+
+.authorizationLabel {
+  font-family: $font-title;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: $color-text-primary;
+}
+
+.authorizationScope {
+  font-family: $font-body;
+  font-size: $font-size-xs;
+  color: $color-text-primary;
+}
+
+.datasheet {
+  margin-top: $spacing-1;
+  align-self: flex-start;
+  font-family: $font-title;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: $color-text-secondary;
+  padding: $spacing-1 0;
+
+  &:hover {
+    color: $color-text-primary;
+    opacity: 1;
+  }
+}
+
+.datasheetPending {
+  margin-top: $spacing-1;
+  align-self: flex-start;
+  font-family: $font-title;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: $color-text-secondary;
+  opacity: 0.55;
+  padding: $spacing-1 0;
+}

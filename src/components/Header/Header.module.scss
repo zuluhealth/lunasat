@@ -97,6 +97,82 @@
   align-items: center;
   gap: $spacing-2;
   flex-shrink: 0;
+
+  @include mobile {
+    display: none;
+  }
+}
+
+.menuButton {
+  display: none;
+  width: 48px;
+  height: 48px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 7px;
+  padding: 0;
+  color: $color-text-primary;
+  background: transparent;
+  border: 1px solid $color-border;
+  cursor: pointer;
+
+  span {
+    width: 18px;
+    height: 1px;
+    background: currentColor;
+  }
+
+  @include mobile {
+    display: flex;
+  }
+}
+
+.mobileNav {
+  display: none;
+
+  @include mobile {
+    position: fixed;
+    inset: $spacing-10 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-1;
+    min-height: calc(100vh - #{$spacing-10});
+    min-height: calc(100svh - #{$spacing-10});
+    padding: $spacing-6 $page-margin-mobile;
+    overflow-y: auto;
+    background: rgba($color-bg-primary, 0.98);
+    border-top: 1px solid $color-border;
+  }
+}
+
+.mobileNavLink {
+  padding: $spacing-3 0;
+  font-family: $font-title;
+  font-size: $font-size-xl;
+  color: $color-text-primary;
+  text-transform: uppercase;
+  border-bottom: 1px solid $color-border;
+}
+
+.mobileActions {
+  display: grid;
+  gap: $spacing-2;
+  margin-top: auto;
+  padding-top: $spacing-6;
+
+  a {
+    display: flex;
+    min-height: 48px;
+    align-items: center;
+    justify-content: center;
+    padding: $spacing-2;
+    font-family: $font-title;
+    font-size: $font-size-sm;
+    color: $color-text-primary;
+    text-transform: uppercase;
+    border: 1px solid $color-border-light;
+  }
 }
 
 .button {

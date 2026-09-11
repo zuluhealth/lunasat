@@ -1,0 +1,84 @@
+name: dependabot-auto-merge
+
+# Le plan GitHub free n'autorise ni branch protection ni rulesets, donc on ne peut
+# pas declarer la CI comme check requis — et sans check requis, l'auto-merge natif
+# de GitHub fusionne immediatement au lieu d'attendre le build.
+#
+# Le garde-fou vit donc ici : ce workflow ne demarre qu'apres une execution reussie
+# de la CI, sur une PR de Dependabot, et refuse les sauts majeurs et les downgrades.
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  merge:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.actor.login == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      REPO: ${{ github.repository }}
+      SHA: ${{ github.event.workflow_run.head_sha }}
+    steps:
+      - name: Retrouver la PR
+        id: pr
+        run: |
+          num=$(gh api "/repos/$REPO/commits/$SHA/pulls" \
+                  --jq '[.[] | select(.state == "open")][0].number // empty')
+          if [ -z "$num" ]; then
+            echo "Aucune PR ouverte pour $SHA — rien a faire."
+            exit 0
+          fi
+          echo "number=$num" >> "$GITHUB_OUTPUT"
+
+      - name: Refuser les sauts majeurs et les downgrades
+        id: gate
+        if: steps.pr.outputs.number
+        continue-on-error: true
+        run: |
+          gh pr view "${{ steps.pr.outputs.number }}" -R "$REPO" \
+            --json author,title,body,headRefOid,isCrossRepository,baseRefName > pr.json
+          node -e '
+            const pr = require("./pr.json");
+            const stop = (m) => { console.log("Pas de merge automatique — " + m); process.exit(3); };
+
+            const who = (pr.author && pr.author.login) || "";
+            if (!["dependabot[bot]", "app/dependabot"].includes(who)) stop("auteur inattendu : " + who);
+            if (pr.headRefOid !== process.env.SHA || pr.isCrossRepository || pr.baseRefName !== "main") stop("la PR ne correspond pas au commit verifie");
+
+            const pairs = [];
+            const body = pr.body || "";
+            // Dependabot ecrit ses PRs groupees sous deux formes selon les cas :
+            // un tableau markdown, ou des lignes "Updates `pkg` from X to Y".
+            // Il faut lire les deux, sinon on refuse des PRs parfaitement saines.
+            const table = /\|\s*\[?[@\w./-]+\]?[^|]*\|\s*`([\w.-]+)`\s*\|\s*`([\w.-]+)`\s*\|/g;
+            for (const m of body.matchAll(table)) pairs.push([m[1], m[2]]);
+            const prose = /Updates `[@\w./-]+` from ([\w.-]+) to ([\w.-]+)/g;
+            for (const m of body.matchAll(prose)) pairs.push([m[1], m[2]]);
+            const t = pr.title.match(/from ([\w.-]+) to ([\w.-]+)/);
+            if (t) pairs.push([t[1], t[2]]);
+            if (!pairs.length) stop("versions illisibles depuis la PR");
+
+            for (const [from, to] of pairs) {
+              const f = from.split(".").map(Number);
+              const g = to.split(".").map(Number);
+              const cmp = (f[0] - g[0]) || (f[1] - g[1]) || (f[2] - g[2]);
+              if (cmp > 0) stop("downgrade " + from + " vers " + to);
+              if (g[0] > f[0]) stop("saut majeur " + from + " vers " + to);
+            }
+            console.log(pairs.length + " mise(s) a jour, toutes en patch ou minor.");
+          '
+
+      - name: Merger
+        if: steps.pr.outputs.number && steps.gate.outcome == 'success'
+        run: |
+          gh pr merge "${{ steps.pr.outputs.number }}" -R "$REPO" --squash --delete-branch --match-head-commit "$SHA"
+          echo "PR #${{ steps.pr.outputs.number }} mergee apres CI verte."

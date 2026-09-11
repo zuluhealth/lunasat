@@ -13,6 +13,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ navItems }) => {
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     // Trigger animation on mount with small delay for smooth effect
@@ -20,10 +21,27 @@ const Header: React.FC<HeaderProps> = ({ navItems }) => {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    if (!isMenuOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setIsMenuOpen(false);
+    };
+
+    document.body.style.overflow = 'hidden';
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isMenuOpen]);
+
   return (
     <header className={styles.header}>
       <div className={styles.container}>
-        <a href="#home" className={styles.logo}>
+        <a href="#home" className={styles.logo} onClick={() => setIsMenuOpen(false)}>
           <svg
             width="118"
             height="14"
@@ -61,7 +79,44 @@ const Header: React.FC<HeaderProps> = ({ navItems }) => {
             <TextReveal text="[ GET IN TOUCH ]" />
           </a>
         </div>
+
+        {navItems && navItems.length > 0 && (
+          <button
+            type="button"
+            className={styles.menuButton}
+            aria-label={isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-controls="mobile-navigation"
+            aria-expanded={isMenuOpen}
+            onClick={() => setIsMenuOpen((open) => !open)}
+          >
+            <span />
+            <span />
+          </button>
+        )}
       </div>
+
+      {isMenuOpen && navItems && (
+        <nav id="mobile-navigation" className={styles.mobileNav} aria-label="Mobile navigation">
+          {navItems.map((item) => (
+            <a
+              key={item.href}
+              href={item.href}
+              className={styles.mobileNavLink}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              {item.label}
+            </a>
+          ))}
+          <div className={styles.mobileActions}>
+            <a href="/partner-login" onClick={() => setIsMenuOpen(false)}>
+              Partner Login
+            </a>
+            <a href="#contact" onClick={() => setIsMenuOpen(false)}>
+              Get in Touch
+            </a>
+          </div>
+        </nav>
+      )}
     </header>
   );
 };

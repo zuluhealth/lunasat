@@ -12,15 +12,23 @@ const RevealOverlay: React.FC = () => {
   const animationRef = useRef<number | null>(null);
 
   useEffect(() => {
-    // After 800ms, fade in the text next to the star
+    const shouldSkip =
+      window.innerWidth < 768 ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (shouldSkip) {
+      const skipFrame = requestAnimationFrame(() => setIsComplete(true));
+      return () => cancelAnimationFrame(skipFrame);
+    }
+
+    // Keep the branded reveal brief so it does not block the page experience.
     const textTimer = setTimeout(() => {
       setShowText(true);
-    }, 800);
+    }, 150);
 
-    // After text has faded in (800ms + 1000ms fade), start the reveal
     const revealTimer = setTimeout(() => {
       setIsRevealing(true);
-    }, 2000);
+    }, 450);
 
     return () => {
       clearTimeout(textTimer);
@@ -35,9 +43,9 @@ const RevealOverlay: React.FC = () => {
     if (!isRevealing) return;
 
     const startTime = performance.now();
-    const duration = 2800;
+    const duration = 800;
     const startRadius = 30;
-    const endRadius = 3000;
+    const endRadius = Math.hypot(window.innerWidth, window.innerHeight) * 1.15;
 
     const easeOutQuint = (t: number): number => {
       return 1 - Math.pow(1 - t, 5);
@@ -54,7 +62,7 @@ const RevealOverlay: React.FC = () => {
       if (progress < 1) {
         animationRef.current = requestAnimationFrame(animate);
       } else {
-        setTimeout(() => setIsComplete(true), 100);
+        setIsComplete(true);
       }
     };
 
@@ -92,7 +100,7 @@ const RevealOverlay: React.FC = () => {
       rgba(0, 0, 0, 0.7) ${radius + 40}px,
       black ${radius + 60}px
     )`,
-    opacity: radius > 2000 ? Math.max(0, 1 - (radius - 2000) / 1000) : 1,
+    opacity: radius > 900 ? Math.max(0, 1 - (radius - 900) / 500) : 1,
   } : {};
 
   return (

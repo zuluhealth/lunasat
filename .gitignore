@@ -42,3 +42,6 @@ next-env.d.ts
 
 # build output
 dist/
+
+# invite ledger (runtime data — keep across deploys, never commit)
+var/

@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import styles from './Footer.module.scss';
 import TextReveal from '../TextReveal/TextReveal';
 
@@ -20,10 +21,14 @@ const Footer: React.FC<FooterProps> = ({ navLinks = [], legalLinks = [] }) => {
       <div className={styles.container}>
         <div className={styles.top}>
           <a href="#home" className={styles.logo}>
-            <img
+            <Image
               src="/lunasat-full.svg"
               alt="Lunasat"
               className={styles.logoImage}
+              width={218}
+              height={40}
+              sizes="109px"
+              loading="lazy"
             />
           </a>
           

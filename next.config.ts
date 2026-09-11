@@ -1,8 +1,13 @@
 import type { NextConfig } from "next";
 import path from "path";
+import { securityHeaders } from "./src/lib/security-headers";
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  poweredByHeader: false,
+  async headers() {
+    return [{ source: "/:path*", headers: securityHeaders() }];
+  },
   turbopack: {
     root: path.resolve(__dirname),
   },

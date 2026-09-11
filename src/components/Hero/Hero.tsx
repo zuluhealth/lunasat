@@ -7,7 +7,6 @@ import TextReveal from '../TextReveal/TextReveal';
 interface HeroProps {
   title: string;
   subtitle?: string;
-  backgroundImage?: string;
   ctaText?: string;
   ctaHref?: string;
 }

@@ -1,0 +1,239 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.main {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  background-color: transparent;
+  position: relative;
+}
+
+.strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-1;
+  padding: 6px $spacing-3;
+  background-color: rgba(5, 5, 5, 0.7);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.stripLeft {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-1;
+}
+
+.stripMark {
+  width: 6px;
+  height: 6px;
+  background-color: $color-text-primary;
+  display: inline-block;
+}
+
+.stripLabel {
+  font-family: $font-title;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: $color-text-secondary;
+}
+
+.stripMeta {
+  font-family: $font-title;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: $color-text-tertiary;
+
+  @include mobile {
+    display: none;
+  }
+}
+
+.container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-8 $page-margin;
+  position: relative;
+
+  @include tablet-down {
+    padding: $spacing-6 $page-margin-tablet;
+  }
+
+  @include mobile {
+    padding: $spacing-5 $page-margin-mobile;
+  }
+}
+
+.content {
+  width: 100%;
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: $spacing-2;
+}
+
+.subLabel {
+  font-family: $font-title;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: $color-text-tertiary;
+}
+
+.title {
+  font-family: $font-title;
+  font-size: clamp(40px, 8vw, 96px);
+  color: $color-text-primary;
+  font-weight: 500;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.description {
+  font-family: $font-title;
+  font-size: $font-size-xs;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: $color-text-primary;
+  line-height: 1.6;
+  margin: $spacing-1 0 $spacing-3;
+  max-width: 480px;
+}
+
+.contactButton {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  margin-top: $spacing-1;
+  font-family: $font-title;
+  font-size: $font-size-xs;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: $color-text-primary;
+  background-color: transparent;
+  border: 1px solid $color-text-primary;
+  padding: $spacing-2 $spacing-3;
+  min-height: 48px;
+  text-decoration: none;
+  transition: background-color $transition-fast, color $transition-fast;
+
+  &:hover {
+    background-color: $color-text-primary;
+    color: $color-bg-primary;
+    opacity: 1;
+  }
+}
+
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+  margin-top: $spacing-4;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+}
+
+.fieldLabel {
+  font-family: $font-title;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: $color-text-secondary;
+}
+
+.readonlyValue {
+  font-family: $font-title;
+  font-size: $font-size-sm;
+  letter-spacing: 0.1em;
+  color: $color-text-primary;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: $spacing-2;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.checkboxRow {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-2;
+  cursor: pointer;
+}
+
+.checkbox {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: $color-text-primary;
+  cursor: pointer;
+}
+
+.checkboxLabel {
+  font-family: $font-title;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: $color-text-secondary;
+  line-height: 1.6;
+}
+
+.error {
+  font-family: $font-title;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #ff6b6b;
+  line-height: 1.6;
+}
+
+.submitButton {
+  align-self: flex-start;
+  margin-top: $spacing-1;
+  font-family: $font-title;
+  font-size: $font-size-xs;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: $color-text-primary;
+  background-color: transparent;
+  border: 1px solid $color-text-primary;
+  padding: $spacing-2 $spacing-3;
+  min-height: 48px;
+  cursor: pointer;
+  transition: background-color $transition-fast, color $transition-fast,
+    opacity $transition-fast;
+
+  &:hover {
+    background-color: $color-text-primary;
+    color: $color-bg-primary;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+
+    &:hover {
+      background-color: transparent;
+      color: $color-text-primary;
+    }
+  }
+}

@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import TitleDescription from '../TitleDescription/TitleDescription';
 import styles from './PartnersSection.module.scss';
 
@@ -27,10 +28,14 @@ const PartnersSection: React.FC<PartnersSectionProps> = ({ title, description, p
           {partners.map((partner, index) => (
             <div key={index} className={styles.partnerCard}>
               {partner.logo ? (
-                <img
+                <Image
                   src={partner.logo}
                   alt={partner.name}
                   className={styles.logo}
+                  width={120}
+                  height={40}
+                  sizes="120px"
+                  loading="lazy"
                 />
               ) : (
                 <span className={styles.placeholder}>{partner.name}</span>

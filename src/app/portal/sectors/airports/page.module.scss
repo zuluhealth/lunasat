@@ -1,0 +1,278 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-6;
+}
+
+.templateNote {
+  font-family: $font-title;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: $color-text-primary;
+  padding: $spacing-2 $spacing-3;
+  border: 1px dashed $color-border-light;
+  background-color: $color-bg-secondary;
+  align-self: flex-start;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: baseline;
+  gap: $spacing-2;
+  padding-bottom: $spacing-1;
+  border-bottom: 1px solid $color-border;
+}
+
+.sectionNumber {
+  font-family: $font-title;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: $color-text-tertiary;
+}
+
+.sectionTitle {
+  font-family: $font-title;
+  font-size: clamp(#{$font-size-lg}, 2.4vw, #{$font-size-2xl});
+  color: $color-text-primary;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+
+/* Operational picture */
+.opsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-2;
+
+  @media (max-width: #{$breakpoint-desktop}) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.opsCard {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+  padding: $spacing-3;
+  background-color: $color-bg-secondary;
+  border: 1px solid $color-border;
+}
+
+.opsId {
+  font-family: $font-title;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: $color-text-tertiary;
+}
+
+.opsTitle {
+  font-family: $font-title;
+  font-size: $font-size-lg;
+  color: $color-text-primary;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  line-height: 1.15;
+}
+
+.opsBody {
+  font-family: $font-body;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: 1.6;
+}
+
+/* What Lunasat integrates */
+.integrationStack {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+}
+
+.integrationRow {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: $spacing-3;
+  padding: $spacing-3;
+  background-color: $color-bg-secondary;
+  border: 1px solid $color-border;
+
+  @media (max-width: #{$breakpoint-tablet}) {
+    grid-template-columns: 1fr;
+    gap: $spacing-2;
+  }
+}
+
+.integrationMeta {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+}
+
+.integrationId {
+  font-family: $font-title;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: $color-text-tertiary;
+}
+
+.integrationSource {
+  font-family: $font-title;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: $color-text-secondary;
+  align-self: flex-start;
+  transition: color $transition-fast;
+
+  &:hover {
+    color: $color-text-primary;
+  }
+}
+
+.integrationBody {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+}
+
+.integrationTitle {
+  font-family: $font-title;
+  font-size: $font-size-lg;
+  color: $color-text-primary;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  line-height: 1.15;
+}
+
+.integrationDescription {
+  font-family: $font-body;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: 1.6;
+}
+
+/* Delivery model */
+.deliveryBlock {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+  padding: $spacing-3;
+  background-color: $color-bg-secondary;
+  border: 1px solid $color-border;
+}
+
+.deliveryLine {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: $spacing-2;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.deliveryStep {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-2;
+}
+
+.deliveryStepLabel {
+  font-family: $font-title;
+  font-size: $font-size-base;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: $color-text-primary;
+}
+
+.deliveryArrow {
+  font-family: $font-title;
+  color: $color-text-tertiary;
+}
+
+.deliveryProse {
+  font-family: $font-body;
+  font-size: $font-size-base;
+  color: $color-text-secondary;
+  line-height: 1.7;
+  max-width: 720px;
+}
+
+/* CTA */
+.cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-4;
+  padding: $spacing-5;
+  background-color: $color-bg-secondary;
+  border: 1px solid $color-border;
+
+  @media (max-width: #{$breakpoint-tablet}) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $spacing-3;
+  }
+}
+
+.ctaBody {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+}
+
+.ctaEyebrow {
+  font-family: $font-title;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: $color-text-tertiary;
+}
+
+.ctaTitle {
+  font-family: $font-title;
+  font-size: clamp(#{$font-size-lg}, 2.4vw, #{$font-size-xl});
+  color: $color-text-primary;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+
+.ctaText {
+  font-family: $font-body;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: 1.6;
+  max-width: 520px;
+}
+
+.ctaLink {
+  font-family: $font-title;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: $color-text-primary;
+  padding: $spacing-2 $spacing-3;
+  border: 1px solid $color-border-light;
+  white-space: nowrap;
+  transition: border-color $transition-fast, background-color $transition-fast;
+
+  &:hover {
+    border-color: $color-text-secondary;
+    background-color: $color-bg-tertiary;
+  }
+}

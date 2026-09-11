@@ -1,0 +1,400 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+$sidebar-width: 260px;
+$topbar-height: 64px;
+$strip-height: 28px;
+
+.shell {
+  min-height: 100vh;
+  background-color: $color-bg-primary;
+  color: $color-text-primary;
+  display: flex;
+  flex-direction: column;
+}
+
+.classificationStrip {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  height: $strip-height;
+  background-color: #050505;
+  border-bottom: 1px solid $color-border;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 $spacing-3;
+  font-family: $font-title;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: $color-text-secondary;
+}
+
+.classificationLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-1;
+
+  &::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background-color: $color-text-primary;
+    display: inline-block;
+  }
+}
+
+.classificationMeta {
+  color: $color-text-tertiary;
+
+  @media (max-width: 360px) {
+    display: none;
+  }
+}
+
+.topBar {
+  position: sticky;
+  top: $strip-height;
+  z-index: 55;
+  height: $topbar-height;
+  background-color: rgba($color-bg-primary, 0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid $color-border;
+  display: flex;
+  align-items: center;
+  padding: 0 $spacing-3;
+  gap: $spacing-3;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-2;
+  color: $color-text-primary;
+  flex-shrink: 0;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.brandLogo {
+  height: 12px;
+  width: auto;
+  display: block;
+}
+
+.brandSuffix {
+  font-family: $font-title;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: $color-text-tertiary;
+  text-transform: uppercase;
+
+  @include mobile {
+    display: none;
+  }
+}
+
+.menuToggle {
+  display: none;
+  font-family: $font-title;
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  padding: $spacing-1 $spacing-2;
+  border: 1px solid $color-border;
+  background: transparent;
+  letter-spacing: 0.1em;
+  min-height: 44px;
+
+  &:hover {
+    color: $color-text-primary;
+    border-color: $color-border-light;
+  }
+
+  @media (max-width: #{$breakpoint-desktop - 1px}) {
+    display: inline-flex;
+    margin-left: auto;
+  }
+}
+
+.menuToggleLabel {
+  white-space: nowrap;
+}
+
+.userBlock {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+
+  @media (max-width: #{$breakpoint-desktop - 1px}) {
+    margin-left: 0;
+  }
+
+  @include mobile {
+    .userMeta {
+      display: none;
+    }
+  }
+}
+
+.userMeta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  line-height: 1.1;
+}
+
+.userMetaLabel {
+  font-family: $font-title;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: $color-text-tertiary;
+  text-transform: uppercase;
+}
+
+.userEmail {
+  font-family: $font-title;
+  font-size: $font-size-xs;
+  color: $color-text-primary;
+  letter-spacing: 0.05em;
+  text-transform: lowercase;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.signOut {
+  font-family: $font-title;
+  font-size: $font-size-xs;
+  letter-spacing: 0.1em;
+  color: $color-text-secondary;
+  padding: $spacing-1 $spacing-2;
+  border: 1px solid $color-border;
+  background: transparent;
+  min-height: 44px;
+
+  &:hover {
+    color: $color-text-primary;
+    border-color: $color-text-primary;
+  }
+}
+
+.topSignOutForm {
+  @media (max-width: 360px) {
+    display: none;
+  }
+}
+
+.body {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+  min-height: 0;
+}
+
+.sidebar {
+  width: $sidebar-width;
+  flex-shrink: 0;
+  background-color: $color-bg-secondary;
+  border-right: 1px solid $color-border;
+  padding: $spacing-4 0 $spacing-6 0;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+  position: sticky;
+  top: calc(#{$strip-height} + #{$topbar-height});
+  align-self: flex-start;
+  max-height: calc(100vh - #{$strip-height} - #{$topbar-height});
+  overflow-y: auto;
+
+  @media (max-width: #{$breakpoint-desktop - 1px}) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    height: 100vh;
+    height: 100svh;
+    max-height: 100vh;
+    max-height: 100svh;
+    z-index: 70;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    padding-top: calc(#{$strip-height} + #{$topbar-height} + #{$spacing-2});
+  }
+}
+
+.sidebarOpen {
+  transform: translateX(0);
+}
+
+.drawerScrim {
+  display: none;
+  @media (max-width: #{$breakpoint-desktop - 1px}) {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 65;
+    border: none;
+    cursor: pointer;
+  }
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+  flex: 1;
+}
+
+.navGroup {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+}
+
+.navGroupLabel {
+  font-family: $font-title;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  color: $color-text-tertiary;
+  text-transform: uppercase;
+  padding: 0 $spacing-3;
+  margin-bottom: $spacing-1;
+}
+
+.navList {
+  display: flex;
+  flex-direction: column;
+}
+
+.navItem {
+  display: block;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  gap: $spacing-1;
+  padding: $spacing-1 $spacing-3;
+  font-family: $font-title;
+  font-size: $font-size-sm;
+  letter-spacing: 0.04em;
+  color: $color-text-secondary;
+  border-left: 2px solid transparent;
+  transition: color $transition-fast, border-color $transition-fast, background-color $transition-fast;
+
+  &:hover {
+    color: $color-text-primary;
+    background-color: rgba(255, 255, 255, 0.03);
+    opacity: 1;
+  }
+}
+
+.navLinkActive {
+  color: $color-text-primary;
+  border-left-color: $color-text-primary;
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+.navLinkMarker {
+  width: 12px;
+  text-align: center;
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+
+  .navLinkActive & {
+    color: $color-text-primary;
+  }
+}
+
+.sidebarFooter {
+  padding: 0 $spacing-3;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sidebarSignOutForm {
+  display: none;
+
+  @media (max-width: 360px) {
+    display: block;
+    margin-top: $spacing-2;
+  }
+}
+
+.sidebarSignOut {
+  width: 100%;
+  min-height: 44px;
+  padding: $spacing-1 $spacing-2;
+  font-family: $font-title;
+  font-size: $font-size-xs;
+  letter-spacing: 0.1em;
+  color: $color-text-secondary;
+  background: transparent;
+  border: 1px solid $color-border;
+}
+
+@media (max-width: 360px) {
+  .classificationStrip,
+  .topBar {
+    padding-left: $spacing-2;
+    padding-right: $spacing-2;
+  }
+
+  .topBar {
+    gap: $spacing-1;
+  }
+
+  .brandLogo {
+    width: 90px;
+  }
+}
+
+.sidebarFooterLine {
+  font-family: $font-title;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: $color-text-tertiary;
+  text-transform: uppercase;
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+  padding: $spacing-6 $spacing-6 $spacing-12 $spacing-6;
+  max-width: 1280px;
+  width: 100%;
+
+  @include tablet {
+    padding: $spacing-5 $spacing-5 $spacing-10 $spacing-5;
+  }
+
+  @include mobile {
+    padding: $spacing-4 $spacing-3 $spacing-8 $spacing-3;
+  }
+}
+
+.navIndex {
+  font-size: 11px;
+  color: $color-text-secondary;
+  letter-spacing: 1px;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.navBadge {
+  font-size: 10px;
+  color: $color-text-secondary;
+  border: 1px solid $color-border;
+  padding: 1px 6px;
+  letter-spacing: 1px;
+  margin-left: 8px;
+  flex-shrink: 0;
+}

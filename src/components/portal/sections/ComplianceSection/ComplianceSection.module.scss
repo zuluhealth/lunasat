@@ -1,0 +1,136 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-6;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: baseline;
+  gap: $spacing-2;
+  padding-bottom: $spacing-1;
+  border-bottom: 1px solid $color-border;
+}
+
+.sectionNumber {
+  font-family: $font-title;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: $color-text-tertiary;
+}
+
+.sectionTitle {
+  font-family: $font-title;
+  font-size: clamp(#{$font-size-lg}, 2.4vw, #{$font-size-2xl});
+  color: $color-text-primary;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+
+// ----- Governance regime tiles -------------------------------------------
+.regimeGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $spacing-2;
+
+  @media (max-width: #{$breakpoint-desktop}) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: #{$breakpoint-mobile}) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.regimeTile {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+  min-height: 220px;
+  padding: $spacing-4 $spacing-3;
+  background-color: $color-bg-secondary;
+  border: 1px solid $color-border;
+  transition: border-color $transition-fast, background-color $transition-fast;
+
+  &:hover {
+    border-color: $color-border-light;
+    background-color: $color-bg-tertiary;
+  }
+}
+
+.regimeEyebrow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: $spacing-2;
+}
+
+.regimeJurisdiction {
+  font-family: $font-title;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: $color-text-primary;
+}
+
+.regimeName {
+  font-family: $font-title;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: $color-text-tertiary;
+  text-align: right;
+}
+
+.regimeCode {
+  font-family: $font-title;
+  font-size: clamp(#{$font-size-3xl}, 4vw, #{$font-size-5xl});
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: $color-text-primary;
+  line-height: 0.95;
+}
+
+.regimeSummary {
+  font-family: $font-body;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: 1.55;
+  margin-top: auto;
+}
+
+// ----- Export-control posture --------------------------------------------
+.postureBlock {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+  padding-top: $spacing-2;
+  border-top: 1px dashed $color-border;
+}
+
+.postureLabel {
+  font-family: $font-title;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: $color-text-tertiary;
+}
+
+.postureParagraph {
+  font-family: $font-body;
+  font-size: $font-size-base;
+  color: $color-text-secondary;
+  line-height: 1.7;
+  max-width: 860px;
+}

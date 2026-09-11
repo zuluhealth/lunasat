@@ -42,6 +42,8 @@ const WaveBackground: React.FC<WaveBackgroundProps> = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: -1000, y: -1000 });
   const animationRef = useRef<number>(0);
+  const drawRef = useRef<() => void>(() => undefined);
+  const shouldAnimateRef = useRef(true);
   const timeRef = useRef(0);
 
   // Generate unique random parameters for each line
@@ -74,8 +76,9 @@ const WaveBackground: React.FC<WaveBackgroundProps> = ({
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const width = canvas.width;
-    const height = canvas.height;
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    const width = canvas.width / dpr;
+    const height = canvas.height / dpr;
     const mouse = mouseRef.current;
 
     // Clear canvas
@@ -155,23 +158,30 @@ const WaveBackground: React.FC<WaveBackgroundProps> = ({
     // Update time
     timeRef.current += 0.016;
 
-    // Continue animation
-    animationRef.current = requestAnimationFrame(draw);
+    if (shouldAnimateRef.current) {
+      animationRef.current = requestAnimationFrame(() => drawRef.current());
+    }
   }, [lineCount, lineColor, lineOpacity, mouseInfluenceRadius, mouseInfluenceStrength, lineParams]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
+    drawRef.current = draw;
+    const canAnimate =
+      !window.matchMedia('(prefers-reduced-motion: reduce)').matches &&
+      !window.matchMedia('(max-width: 767px)').matches;
+    shouldAnimateRef.current = canAnimate && !document.hidden;
+
     // Set canvas size
     const resizeCanvas = () => {
-      const dpr = window.devicePixelRatio || 1;
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       const rect = canvas.getBoundingClientRect();
       canvas.width = rect.width * dpr;
       canvas.height = rect.height * dpr;
       const ctx = canvas.getContext('2d');
       if (ctx) {
-        ctx.scale(dpr, dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       }
     };
 
@@ -189,19 +199,32 @@ const WaveBackground: React.FC<WaveBackgroundProps> = ({
       mouseRef.current = { x: -1000, y: -1000 };
     };
 
+    const handleVisibilityChange = () => {
+      shouldAnimateRef.current = canAnimate && !document.hidden;
+      if (shouldAnimateRef.current) {
+        cancelAnimationFrame(animationRef.current);
+        animationRef.current = requestAnimationFrame(() => drawRef.current());
+      }
+    };
+
     // Initialize
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
-    window.addEventListener('mousemove', handleMouseMove);
-    canvas.addEventListener('mouseleave', handleMouseLeave);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    if (canAnimate) {
+      window.addEventListener('mousemove', handleMouseMove, { passive: true });
+      canvas.addEventListener('mouseleave', handleMouseLeave);
+    }
 
     // Start animation
-    animationRef.current = requestAnimationFrame(draw);
+    animationRef.current = requestAnimationFrame(() => drawRef.current());
 
     return () => {
       window.removeEventListener('resize', resizeCanvas);
       window.removeEventListener('mousemove', handleMouseMove);
       canvas.removeEventListener('mouseleave', handleMouseLeave);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      shouldAnimateRef.current = false;
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }

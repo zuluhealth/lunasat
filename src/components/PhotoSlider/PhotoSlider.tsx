@@ -8,19 +8,23 @@ import styles from './PhotoSlider.module.scss';
 const slides = [
   {
     id: 1,
-    image: '/images/464A5890.JPG',
+    image: '/images/gallery/lunasat-field-system.webp',
+    alt: 'Lunasat field communications system',
   },
   {
     id: 2,
-    image: '/images/464A5916.JPG',
+    image: '/images/gallery/lunasat-command-console.webp',
+    alt: 'Mission-critical command console in operation',
   },
   {
     id: 3,
-    image: '/images/464A6028.JPG',
+    image: '/images/gallery/lunasat-engineering-lab.webp',
+    alt: 'Lunasat engineering and systems integration lab',
   },
   {
     id: 4,
-    image: '/images/464A6035.JPG',
+    image: '/images/gallery/lunasat-radio-workbench.webp',
+    alt: 'Radio systems testing workbench',
   },
 ];
 
@@ -75,11 +79,10 @@ export default function PhotoSlider({ title, description }: PhotoSliderProps) {
               <div className={styles.imageWrapperMobile}>
                 <Image
                   src={slides[activeIndex].image}
-                  alt={`Slide ${activeIndex + 1}`}
+                  alt={slides[activeIndex].alt}
                   fill
                   className={styles.imageMobile}
                   sizes="(max-width: 768px) 90vw, 600px"
-                  priority
                 />
               </div>
             </div>
@@ -115,7 +118,7 @@ export default function PhotoSlider({ title, description }: PhotoSliderProps) {
               <div className={styles.imageWrapper}>
                 <Image
                   src={slide.image}
-                  alt={`Slide ${index + 1}`}
+                  alt={slide.alt}
                   fill
                   sizes="(max-width: 768px) 300px, (max-width: 1024px) 400px, 600px"
                   className={styles.image}

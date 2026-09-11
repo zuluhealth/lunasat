@@ -1,0 +1,441 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.main {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  background-color: transparent;
+  position: relative;
+}
+
+.strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-1;
+  padding: 6px $spacing-3;
+  background-color: rgba(5, 5, 5, 0.7);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.stripLeft {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-1;
+}
+
+.stripMark {
+  width: 6px;
+  height: 6px;
+  background-color: $color-text-primary;
+  display: inline-block;
+}
+
+.stripLabel {
+  font-family: $font-title;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: $color-text-secondary;
+}
+
+.stripMeta {
+  font-family: $font-title;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: $color-text-tertiary;
+}
+
+.stripSignOut {
+  font-family: $font-title;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: $color-text-secondary;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: $spacing-1;
+  transition: color $transition-fast;
+
+  &:hover {
+    color: $color-text-primary;
+  }
+}
+
+.container {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: $spacing-8 $page-margin;
+  position: relative;
+
+  @include tablet-down {
+    padding: $spacing-6 $page-margin-tablet;
+  }
+
+  @include mobile {
+    padding: $spacing-5 $page-margin-mobile;
+  }
+}
+
+.content {
+  width: 100%;
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: $spacing-2;
+}
+
+.wide {
+  width: 100%;
+  max-width: 1080px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: $spacing-3;
+}
+
+.subLabel {
+  font-family: $font-title;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: $color-text-tertiary;
+}
+
+.title {
+  font-family: $font-title;
+  font-size: clamp(40px, 8vw, 96px);
+  color: $color-text-primary;
+  font-weight: 500;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  margin: 0 0 $spacing-3;
+}
+
+.description {
+  font-family: $font-title;
+  font-size: $font-size-xs;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: $color-text-primary;
+  line-height: 1.6;
+  margin: $spacing-1 0 $spacing-3;
+  max-width: 480px;
+}
+
+.note {
+  font-family: $font-title;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  color: $color-text-secondary;
+  text-transform: uppercase;
+}
+
+.envList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+  margin: $spacing-1 0 $spacing-2;
+}
+
+.envItem {
+  font-family: $font-title;
+  font-size: $font-size-sm;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: $color-text-primary;
+}
+
+// ----- Sections ----------------------------------------------------------
+.section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: baseline;
+  gap: $spacing-2;
+  padding-bottom: $spacing-1;
+  border-bottom: 1px solid $color-border;
+}
+
+.sectionNumber {
+  font-family: $font-title;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: $color-text-tertiary;
+}
+
+.sectionTitle {
+  font-family: $font-title;
+  font-size: clamp(#{$font-size-lg}, 2.4vw, #{$font-size-2xl});
+  color: $color-text-primary;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+
+// ----- Forms -------------------------------------------------------------
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-3;
+
+  @include mobile {
+    grid-template-columns: 1fr;
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+}
+
+.fieldLabel {
+  font-family: $font-title;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: $color-text-secondary;
+}
+
+.input {
+  width: 100%;
+  font-family: $font-title;
+  font-size: $font-size-sm;
+  letter-spacing: 0.1em;
+  color: $color-text-primary;
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: $spacing-2;
+  min-height: 48px;
+  transition: border-color $transition-fast;
+
+  &::placeholder {
+    color: $color-text-tertiary;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $color-text-primary;
+  }
+}
+
+select.input {
+  appearance: none;
+}
+
+.error {
+  font-family: $font-title;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #ff6b6b;
+  line-height: 1.6;
+}
+
+.submitButton {
+  align-self: flex-start;
+  margin-top: $spacing-1;
+  font-family: $font-title;
+  font-size: $font-size-xs;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: $color-text-primary;
+  background-color: transparent;
+  border: 1px solid $color-text-primary;
+  padding: $spacing-2 $spacing-3;
+  min-height: 48px;
+  cursor: pointer;
+  transition: background-color $transition-fast, color $transition-fast,
+    opacity $transition-fast;
+
+  &:hover {
+    background-color: $color-text-primary;
+    color: $color-bg-primary;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+
+    &:hover {
+      background-color: transparent;
+      color: $color-text-primary;
+    }
+  }
+}
+
+// ----- Latest link block -------------------------------------------------
+.latestBlock {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+  padding: $spacing-3;
+  border: 1px solid $color-border;
+  background-color: $color-bg-secondary;
+}
+
+.latestRow {
+  display: flex;
+  gap: $spacing-2;
+  align-items: stretch;
+
+  @include mobile {
+    flex-direction: column;
+  }
+}
+
+.linkInput {
+  flex: 1;
+  font-family: $font-title;
+  font-size: $font-size-sm;
+  letter-spacing: 0.05em;
+  color: $color-text-primary;
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: $spacing-2;
+  min-height: 48px;
+
+  &:focus {
+    outline: none;
+    border-color: $color-text-primary;
+  }
+}
+
+// ----- Ledger table ------------------------------------------------------
+.tableWrap {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid $color-border;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 860px;
+}
+
+.th {
+  font-family: $font-title;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: $color-text-tertiary;
+  text-align: left;
+  padding: $spacing-2;
+  border-bottom: 1px solid $color-border;
+  white-space: nowrap;
+}
+
+.tr {
+  border-bottom: 1px solid $color-border;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.td {
+  font-family: $font-title;
+  font-size: $font-size-sm;
+  letter-spacing: 0.05em;
+  color: $color-text-primary;
+  padding: $spacing-2;
+  vertical-align: middle;
+}
+
+.chip {
+  display: inline-block;
+  font-family: $font-title;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border: 1px solid $color-border-light;
+}
+
+.chip_active {
+  color: $color-text-primary;
+  border-color: $color-text-primary;
+}
+
+.chip_revoked {
+  color: #ff6b6b;
+  border-color: #ff6b6b;
+}
+
+.chip_expired {
+  color: $color-text-tertiary;
+  border-color: $color-text-tertiary;
+}
+
+.rowActions {
+  display: flex;
+  gap: $spacing-1;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.ghostButton {
+  font-family: $font-title;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: $color-text-secondary;
+  background: transparent;
+  border: 1px solid $color-border-light;
+  padding: 6px 10px;
+  min-height: 36px;
+  cursor: pointer;
+  transition: color $transition-fast, border-color $transition-fast;
+
+  &:hover {
+    color: $color-text-primary;
+    border-color: $color-text-primary;
+  }
+}
+
+.dangerButton {
+  font-family: $font-title;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #ff6b6b;
+  background: transparent;
+  border: 1px solid rgba(255, 107, 107, 0.5);
+  padding: 6px 10px;
+  min-height: 36px;
+  cursor: pointer;
+  transition: color $transition-fast, border-color $transition-fast;
+
+  &:hover {
+    color: #ff8f8f;
+    border-color: #ff6b6b;
+  }
+}

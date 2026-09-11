@@ -4,46 +4,303 @@
 .main {
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  // No background — let the GlobalWaveBackground show through.
+  background-color: transparent;
+  position: relative;
+}
+
+.strip {
+  display: flex;
   align-items: center;
-  justify-content: center;
-  padding: $spacing-10 $page-margin;
+  justify-content: space-between;
+  gap: $spacing-1;
+  padding: 6px $spacing-3;
+  background-color: rgba(5, 5, 5, 0.7);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.stripLeft {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-1;
+}
+
+.stripMark {
+  width: 6px;
+  height: 6px;
+  background-color: $color-text-primary;
+  display: inline-block;
+}
+
+.stripLabel {
+  font-family: $font-title;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: $color-text-secondary;
+}
+
+.stripMeta {
+  font-family: $font-title;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: $color-text-tertiary;
+
+  @include mobile {
+    display: none;
+  }
 }
 
 .container {
-  max-width: 480px;
-  width: 100%;
-  text-align: center;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-8 $page-margin;
+  position: relative;
+
+  @include tablet-down {
+    padding: $spacing-6 $page-margin-tablet;
+  }
+
+  @include mobile {
+    padding: $spacing-5 $page-margin-mobile;
+  }
 }
 
 .back {
-  display: inline-block;
+  position: absolute;
+  top: $spacing-4;
+  left: $spacing-4;
   font-family: $font-title;
   font-size: $font-size-xs;
   color: $color-text-tertiary;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: $spacing-6;
+  letter-spacing: 0.15em;
   transition: color 0.2s ease;
+  text-decoration: none;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
 
   &:hover {
     color: $color-text-primary;
+    opacity: 1;
+  }
+
+  @include mobile {
+    top: $spacing-3;
+    left: $spacing-3;
   }
 }
 
-.title {
-  font-size: clamp(#{$font-size-3xl}, 6vw, #{$font-size-5xl});
-  color: $color-white;
-  font-weight: 500;
-  line-height: 1;
-  letter-spacing: -0.03em;
+.content {
+  width: 100%;
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: $spacing-2;
+}
+
+.subLabel {
+  font-family: $font-title;
+  font-size: 11px;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
-  margin-bottom: $spacing-4;
+  color: $color-text-tertiary;
+}
+
+.title {
+  font-family: $font-title;
+  font-size: clamp(48px, 10vw, 120px);
+  color: $color-text-primary;
+  font-weight: 500;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  margin: 0;
 }
 
 .description {
   font-family: $font-title;
-  font-size: $font-size-sm;
+  font-size: $font-size-xs;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: $color-text-primary;
+  line-height: 1.6;
+  margin: $spacing-1 0 $spacing-3;
+  max-width: 480px;
+}
+
+.note {
+  margin-top: $spacing-2;
+  font-family: $font-title;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  color: $color-text-primary;
+  text-transform: uppercase;
+}
+
+.contactButton {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  margin-top: $spacing-1;
+  font-family: $font-title;
+  font-size: $font-size-xs;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: $color-text-primary;
+  background-color: transparent;
+  border: 1px solid $color-text-primary;
+  padding: $spacing-2 $spacing-3;
+  min-height: 48px;
+  text-decoration: none;
+  transition: background-color $transition-fast, color $transition-fast;
+
+  &:hover {
+    background-color: $color-text-primary;
+    color: $color-bg-primary;
+    opacity: 1;
+  }
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  width: 100%;
+  margin-top: $spacing-4;
+}
+
+.dividerLine {
+  flex: 1;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.dividerLabel {
+  font-family: $font-title;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
   color: $color-text-secondary;
-  line-height: 1.7;
-  letter-spacing: 0.03em;
+}
+
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+  margin-top: $spacing-4;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+}
+
+.fieldLabel {
+  font-family: $font-title;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: $color-text-secondary;
+}
+
+.input {
+  width: 100%;
+  font-family: $font-title;
+  font-size: $font-size-sm;
+  letter-spacing: 0.1em;
+  color: $color-text-primary;
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: $spacing-2;
+  min-height: 48px;
+  transition: border-color $transition-fast;
+
+  &::placeholder {
+    color: $color-text-tertiary;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $color-text-primary;
+  }
+}
+
+.checkboxRow {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-2;
+  cursor: pointer;
+}
+
+.checkbox {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: $color-text-primary;
+  cursor: pointer;
+}
+
+.checkboxLabel {
+  font-family: $font-title;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: $color-text-secondary;
+  line-height: 1.6;
+}
+
+.error {
+  font-family: $font-title;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #ff6b6b;
+  line-height: 1.6;
+}
+
+.submitButton {
+  align-self: flex-start;
+  margin-top: $spacing-1;
+  font-family: $font-title;
+  font-size: $font-size-xs;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: $color-text-primary;
+  background-color: transparent;
+  border: 1px solid $color-text-primary;
+  padding: $spacing-2 $spacing-3;
+  min-height: 48px;
+  cursor: pointer;
+  transition: background-color $transition-fast, color $transition-fast,
+    opacity $transition-fast;
+
+  &:hover {
+    background-color: $color-text-primary;
+    color: $color-bg-primary;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+
+    &:hover {
+      background-color: transparent;
+      color: $color-text-primary;
+    }
+  }
 }

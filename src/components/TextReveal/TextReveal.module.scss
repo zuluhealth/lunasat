@@ -3,6 +3,8 @@
 .textReveal {
   display: inline-block;
   white-space: pre-wrap; // Preserve spaces
+  max-width: 100%;
+  overflow-wrap: anywhere;
   font-family: inherit; // Inherit font from parent
   cursor: default;
   
@@ -11,4 +13,3 @@
   //   font-family: $font-mono;
   // }
 }
-
