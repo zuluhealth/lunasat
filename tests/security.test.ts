@@ -4,6 +4,10 @@ import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import crypto from "node:crypto";
+import { NextRequest } from "next/server";
+import { proxy } from "../src/proxy";
+import { onRequestError } from "../src/instrumentation";
+import { reportPortalError } from "../src/lib/portal/diagnostics";
 import { inviteModeEnabled, previewModeEnabled, sealSession, unsealSession, makeAdminCookieValue, isValidAdminCookie, checkAdminPassphrase, SESSION_MAX_AGE, sessionCookieOptions } from "../src/lib/portal/auth";
 import { createInvite, getActiveInvite, getInvite, listInvites, makeToken, verifyToken, revokeInvite, recordOpen } from "../src/lib/portal/invites";
 import { validatePartnerSession } from "../src/lib/portal/authorization";
@@ -40,6 +44,143 @@ after(async () => {
 
 const recipient = { name: "Test Partner", email: "partner@example.test", organization: "Example", days: 7 };
 const partnerCookie = (inviteId: string) => sealSession("partner", { inviteId, ndaAcceptedAt: new Date().toISOString() });
+
+test("proxy failures have a matching safe log reference and remain private 503 responses", async () => {
+  const logs: string[] = [];
+  mock.method(console, "error", (message: string) => logs.push(message));
+  const request = new NextRequest("https://partners.example.test/portal?token=private-token");
+  mock.method(request.cookies, "get", () => {
+    throw new Error("[unenv] fs.readFile is not implemented; private-token");
+  });
+  const response = await proxy(request);
+  assert.equal(response.status, 503);
+  assert.equal(logs.length, 1);
+  const record = JSON.parse(logs[0].slice("[portal-error] ".length));
+  assert.equal(record.errors[0].category, "unsupported-runtime-operation");
+  assert.equal(record.stage, "proxy");
+  assert.match(record.reference, /^[a-f0-9-]{36}$/);
+  assert.equal(response.headers.get("x-portal-error-id"), record.reference);
+  assert.equal(await response.text(), `Partner access is temporarily unavailable.\nReference: ${record.reference}`);
+  assert.match(response.headers.get("cache-control")!, /no-store/);
+  assert.match(response.headers.get("content-security-policy")!, /nonce-/);
+  assert.equal(response.headers.get("referrer-policy"), "no-referrer");
+  assert.ok(!logs[0].includes("private-token"));
+});
+
+test("server instrumentation identifies missing Blobs context without logging request secrets", async () => {
+  const logs: string[] = [];
+  mock.method(console, "error", (message: string) => logs.push(message));
+  process.env.NETLIFY = "true";
+  process.env.NETLIFY_BLOBS_CONTEXT = Buffer.from("{}").toString("base64");
+  let failure: unknown;
+  try { await getActiveInvite("test-id"); } catch (error) { failure = error; }
+  assert.ok(failure instanceof Error);
+  Object.assign(failure, { digest: "1234567890" });
+  await onRequestError(failure, {
+    path: "/portal/recipient@example.test?token=private-token", method: "GET",
+    headers: { cookie: "portal_session=private-cookie", authorization: "Bearer private-key" },
+  }, { routerKind: "App Router", routePath: "/portal/[section]", routeType: "render", revalidateReason: undefined });
+  const record = JSON.parse(logs[0].slice("[portal-error] ".length));
+  assert.equal(record.reference, "1234567890");
+  assert.equal(record.route, "/portal/*");
+  assert.equal(record.errors[0].category, "missing-netlify-blobs-context");
+  for (const value of ["recipient@example.test", "private-token", "private-cookie", "private-key", process.env.INVITE_SECRET!, process.env.ADMIN_PASSPHRASE!]) {
+    assert.ok(!logs.join("").includes(value));
+  }
+});
+
+test("diagnostics retain safe causes and code locations without raw error contents", () => {
+  const logs: string[] = [];
+  mock.method(console, "error", (message: string) => logs.push(message));
+  const error = new SyntaxError('Unexpected token in {"email":"private@example.test","token":"secret-token"}');
+  error.stack = `${error.name}: ${error.message}\n    at read (/Users/private-person/project/src/lib/portal/storage.ts:20:3)`;
+  Object.assign(error, { cause: Object.assign(new Error("secret-token"), { code: "ETIMEDOUT" }),
+    digest: "private@example.test", request: { headers: { authorization: "secret-token" } } });
+  const reference = reportPortalError(error, { stage: "action", route: "/access" });
+  const record = JSON.parse(logs[0].slice("[portal-error] ".length));
+  assert.match(reference, /^[a-f0-9-]{36}$/);
+  assert.equal(record.errors[0].category, "invalid-data-or-syntax");
+  assert.deepEqual(record.errors[0].frames, ["src/lib/portal/storage.ts:20:3"]);
+  assert.equal(record.errors[1].code, "ETIMEDOUT");
+  for (const value of ["private@example.test", "secret-token", "private-person", "Unexpected token"]) assert.ok(!logs[0].includes(value));
+});
+
+test("instrumentation ignores normal access redirects and public requests", async () => {
+  const logs: string[] = [];
+  mock.method(console, "error", (message: string) => logs.push(message));
+  const context = { routerKind: "App Router" as const, routePath: "/portal", routeType: "render" as const, revalidateReason: undefined };
+  for (const digest of ["NEXT_REDIRECT;replace;/partner-login;307;", "NEXT_HTTP_ERROR_FALLBACK;404"]) {
+    await onRequestError(Object.assign(new Error("navigation"), { digest }), { path: "/portal", method: "GET", headers: {} }, context);
+  }
+  for (const path of ["/", "/about", "/portal-lookalike?token=secret"]) {
+    await onRequestError(new Error("public error"), { path, method: "GET", headers: {} }, context);
+  }
+  assert.equal(logs.length, 0);
+});
+
+test("a broken log sink cannot turn an access error into successful access", async () => {
+  mock.method(console, "error", () => { throw new Error("log sink unavailable"); });
+  const request = new NextRequest("https://partners.example.test/portal");
+  mock.method(request.cookies, "get", () => { throw new Error("test failure"); });
+  const response = await proxy(request);
+  assert.equal(response.status, 503);
+  assert.ok(response.headers.get("x-portal-error-id"));
+});
+
+test("proxy checks signed sessions without requiring the server's Blobs context", async () => {
+  const invite = await createInvite(recipient);
+  const cookie = partnerCookie(invite.id);
+  process.env.NETLIFY = "true";
+  process.env.NETLIFY_BLOBS_CONTEXT = Buffer.from("{}").toString("base64");
+
+  const response = await proxy(new NextRequest("https://partners.example.test/portal", {
+    headers: { cookie: `portal_session=${cookie}` },
+  }));
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get("x-middleware-next"), "1");
+  assert.equal(response.body, null);
+  assert.match(response.headers.get("cache-control")!, /no-store/);
+
+  // The proxy only forwards the request. Server authorization still fails
+  // closed when invitation storage is unavailable; it must never grant access.
+  await assert.rejects(() => validatePartnerSession(cookie), { name: "MissingBlobsEnvironmentError" });
+});
+
+
+test("proxy rejects invalid, expired, admin, and NDA-free sessions without storage", async () => {
+  process.env.NETLIFY = "true";
+  process.env.NETLIFY_BLOBS_CONTEXT = Buffer.from("{}").toString("base64");
+  const cookie = partnerCookie("valid-test-invite");
+  const invalid = [undefined, "", "partner@example.test", "unsigned.fake", makeAdminCookieValue(),
+    cookie.slice(0, -1) + (cookie.endsWith("a") ? "b" : "a"),
+    sealSession("partner", { inviteId: "valid-test-invite" }),
+    sealSession("partner", { inviteId: "valid-test-invite", ndaAcceptedAt: "invalid" }),
+    sealSession("partner", { preview: true, email: recipient.email, fullName: recipient.name, ndaAcceptedAt: new Date().toISOString() })];
+  for (const value of invalid) {
+    const response = await proxy(new NextRequest("https://partners.example.test/portal", {
+      headers: value ? { cookie: `portal_session=${value}` } : {},
+    }));
+    assert.equal(response.status, 307);
+    assert.equal(response.headers.get("location"), "https://partners.example.test/partner-login");
+  }
+  const future = Date.now() + SESSION_MAX_AGE * 1000;
+  mock.method(Date, "now", () => future);
+  const expired = await proxy(new NextRequest("https://partners.example.test/portal", {
+    headers: { cookie: `portal_session=${cookie}` },
+  }));
+  assert.equal(expired.status, 307);
+});
+
+test("server refuses a revoked invitation even when its signed cookie passes the proxy", async () => {
+  const invite = await createInvite(recipient);
+  const cookie = partnerCookie(invite.id);
+  await revokeInvite(invite.id);
+  const response = await proxy(new NextRequest("https://partners.example.test/portal", {
+    headers: { cookie: `portal_session=${cookie}` },
+  }));
+  assert.equal(response.headers.get("x-middleware-next"), "1");
+  assert.equal(await validatePartnerSession(cookie), null);
+});
 
 test("production fails closed with missing/weak secrets, even with preview requested", () => {
   for (const [secret, passphrase] of [["", ""], ["short", "long-admin-passphrase"], ["a".repeat(48), "short"], ["a".repeat(48), ""]]) {
@@ -160,9 +301,14 @@ test("admin login budget is shared by concurrent attempts and resets after 15 mi
 });
 
 test("admin login is refused if throttle state cannot be read", async () => {
+  const logs: string[] = [];
+  mock.method(console, "error", (message: string) => logs.push(message));
   assert.equal(await takeAdminLoginAttempt(), true);
   await writeFile(path.join(directory, "var/admin-login.json"), "invalid");
   assert.equal(await takeAdminLoginAttempt(), false);
+  const record = JSON.parse(logs[0].slice("[portal-error] ".length));
+  assert.equal(record.stage, "admin-login");
+  assert.equal(record.errors[0].category, "invalid-data-or-syntax");
 });
 
 test("invite validation bounds user input", async () => {

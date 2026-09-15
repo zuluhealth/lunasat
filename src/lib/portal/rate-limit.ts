@@ -1,5 +1,6 @@
 import "server-only";
 import { updateStored } from "./storage";
+import { reportPortalError } from "./diagnostics";
 
 const WINDOW_MS = 15 * 60 * 1000;
 const MAX_ATTEMPTS = 10;
@@ -18,7 +19,8 @@ export async function takeAdminLoginAttempt(): Promise<boolean> {
       state.attempts += 1;
       return true;
     });
-  } catch {
+  } catch (error) {
+    reportPortalError(error, { stage: "admin-login", route: "/invite" });
     return false; // Storage failure must not disable throttling.
   }
 }

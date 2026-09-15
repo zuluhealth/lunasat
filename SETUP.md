@@ -44,6 +44,11 @@ NDA timestamp; identity is loaded from the server ledger. Revocation and invite
 expiry are checked on each portal request, including client navigation requests.
 Already delivered content cannot be recalled from a recipient's browser.
 
+The proxy performs a storage-free signed-cookie check. The application server
+checks the current invitation on every portal page and protected action before
+returning private data, including expiry and revocation. Netlify runs the proxy
+separately from that server, so the proxy must not read invitation storage.
+
 Deploying this security update signs out existing users and administrators.
 Existing invite links remain usable if their ledger entry is active and the
 signing secret remains unchanged. Rotating `INVITE_SECRET` invalidates all links
@@ -102,3 +107,37 @@ Before launch, deploy the changes, configure the runtime variables and durable
 storage, verify HTTPS/security headers on the actual host, and test one invite
 through acceptance, navigation, and revocation. Local validation does not verify
 the hosting account, CDN configuration, backups, or production secrets.
+
+## Diagnosing private-access failures
+
+Unexpected proxy failures return HTTP 503 and a safe `Reference` on the page
+(and in the `X-Portal-Error-ID` response header). The matching server-side line
+starts with `[portal-error]`. Unhandled private-page, route and server-action
+failures are logged through `src/instrumentation.ts`; when Next.js supplies a
+production error digest, the log uses that digest as its reference. Storage
+failures that refuse administrator sign-in are logged with stage `admin-login`.
+
+No new environment variable or external logging service is needed. Redeploy the
+source changes to enable these logs. In Netlify, select the affected site and
+production deployment, then open its Functions logs for application errors or
+Edge Functions logs for proxy errors. Search for `[portal-error]` or the page's
+reference, with a time range covering the failure and the correct timezone.
+Log delivery can lag behind the request; refresh if the entry is not visible yet.
+Capture the full structured error line, site/domain, deployment ID and timestamp.
+Execution duration and memory entries alone do not contain the application error.
+
+The record includes UTC time, reference, route group, execution stage, error
+category/type, known OS/network codes, and available code locations. For example,
+`missing-netlify-blobs-context` indicates missing storage runtime configuration;
+`unsupported-runtime-operation` indicates an unavailable runtime API; and
+`invalid-data-or-syntax` identifies a parsing/syntax failure. Up to three nested
+causes are classified. Unknown errors retain their safe type and code locations;
+the log may still require investigation rather than identify an exact root cause.
+
+These structured records deliberately omit raw exception messages, request
+headers/bodies, query strings, invitation tokens, credentials and recipient data.
+Code locations omit absolute user-directory prefixes. Ordinary rejected, expired
+and revoked sessions are access decisions, not application errors. A logging
+failure does not grant access. This covers application failures reached by the
+running code; startup failures or platform outages require Netlify platform logs.
+Log retention follows the site's Netlify plan, so capture a report promptly.
