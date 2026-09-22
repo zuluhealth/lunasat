@@ -36,6 +36,8 @@ const PartnersSection: React.FC<PartnersSectionProps> = ({ title, description, p
                   height={40}
                   sizes="120px"
                   loading="lazy"
+                  // These small bundled marks must also work without a host image optimizer.
+                  unoptimized
                 />
               ) : (
                 <span className={styles.placeholder}>{partner.name}</span>

@@ -57,6 +57,8 @@ export default function TechnologyPartnersSection() {
                       fill
                       sizes="140px"
                       loading="lazy"
+                      // Match the public partner grid: serve the bundled logo directly.
+                      unoptimized
                     />
                   ) : (
                     <span className={styles.logoFallback}>{vendor.name}</span>
